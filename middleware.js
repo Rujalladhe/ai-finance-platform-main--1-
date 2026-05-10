@@ -29,3 +29,6 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
+
+// Use Node.js runtime instead of Edge for Clerk compatibility
+export const runtime = 'nodejs';
