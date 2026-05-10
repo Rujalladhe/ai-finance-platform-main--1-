@@ -64,7 +64,7 @@ export function AIInsights() {
           <div className="text-center py-8 text-muted-foreground">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-purple-400" />
             <p className="text-sm">
-              Click "Generate Insights" to get AI-powered financial advice based on your spending patterns.
+              Click &quot;Generate Insights&quot; to get AI-powered financial advice based on your spending patterns.
             </p>
           </div>
         )}
