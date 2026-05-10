@@ -1,5 +1,3 @@
 {
-  "middleware": {
-    "runtime": "nodejs"
-  }
+  "framework": "nextjs"
 }
