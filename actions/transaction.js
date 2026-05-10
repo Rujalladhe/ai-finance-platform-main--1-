@@ -209,8 +209,8 @@ export async function getUserTransactions(query = {}) {
 // Scan Receipt - Using Gemini 3 Flash Preview for maximum free tier requests (1,000 RPD)
 export async function scanReceipt(file) {
   try {
-    // Use Gemini 3 Flash Preview for highest free tier limits (15 RPM, 1,000 RPD)
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    // Use Gemini 1.5 Flash for free tier limits
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Convert File to ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();

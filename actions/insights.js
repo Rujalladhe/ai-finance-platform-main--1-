@@ -79,9 +79,8 @@ export async function generateFinancialInsights() {
       year: "numeric",
     });
 
-    // Use Gemini 3 Flash Preview for highest free tier limits (15 RPM, 1,000 RPD)
-    // This is the newest generation with best performance
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    // Use Gemini 1.5 Flash for free tier limits
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const prompt = `
       Analyze this financial data and provide 3 concise, actionable insights.
