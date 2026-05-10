@@ -2,9 +2,9 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 async function getMonthlyStats(userId, month = new Date()) {
   const startDate = new Date(month.getFullYear(), month.getMonth(), 1);
@@ -79,9 +79,6 @@ export async function generateFinancialInsights() {
       year: "numeric",
     });
 
-    // Use Gemini 1.5 Flash for free tier limits
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const prompt = `
       Analyze this financial data and provide 3 concise, actionable insights.
       Focus on spending patterns and practical advice.
@@ -97,15 +94,20 @@ export async function generateFinancialInsights() {
         .map(([category, amount]) => `${category}: $${amount.toFixed(2)}`)
         .join(", ")}
 
-      Format the response as a JSON array of strings, like this:
+      Respond ONLY with a valid JSON array of 3 strings, like this:
       ["insight 1", "insight 2", "insight 3"]
-      
+
       Make the insights specific to the data provided. If spending is high in a category, mention it. If they're saving well, praise them. Be helpful and encouraging.
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: 512,
+    });
+
+    const text = chatCompletion.choices[0]?.message?.content || "[]";
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
     let insights;
